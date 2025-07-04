@@ -71,7 +71,8 @@ fn Lexer::check(self: Lexer, str: String) -> Bool {
   }
   let old = self.pos;
   for i in str {
-    if ((try? self.peek()).unwrap() != i) {
+    if ((try? self.ch()).unwrap() != i) {
+      self.pos -= 1;
       self.pos = old;
       return false;
     }

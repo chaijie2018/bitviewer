@@ -26,6 +26,34 @@ let map = viewer.extract(spec);
 inspect(map.get("rev").unwrap().to(0), content="\{0x78563412}");
 ```
 
+Moreover, if you want to specify the exact location, you can do it:
+
+```mbt
+// RISC-V instruction format, R-type
+let spec =
+#|opcode: 0..6;
+#|rd    : 7..11;
+#|funct3: 12..14;
+#|rs    : 15..19;
+#|rs2   : 20..24;
+#|funct7: 25..31;
+
+// RISC-V: add x5, x10, x22
+// opcode = 0b0110011 (0x33), funct3 = funct7 = 0
+let viewer = Bitviewer::new(Bitvector::from(0x016502b3).raw());
+let map = viewer.extract(spec);
+inspect(map, content={
+  "opcode": b"\x33",
+  "rd": b"\x05",
+  "funct3": b"\x00",
+  "rs": b"\x0a", // 10
+  "rs2": b"\x16", // 22
+  "funct7": b"\x00",
+}.to_string())
+```
+
+Note the `..` is inclusive on both ends.
+
 For a detailed usage introduction, see the [bitvector](#bitvector) and [bitviewer](#bitviewer) sections below.
 
 ## Bitvector
@@ -43,7 +71,8 @@ The specification language goes as follows:
 ```antlr
 Statement ::= Ident `:` Spec `;`;
 Spec ::= (`<` | `>`)? Expr;
-Expr ::= Mul ((`+` | `-`) Mul)*;
+Expr ::= Add `..` Add | Add;
+Add ::= Mul ((`+` | `-`) Mul)*;
 Mul ::= Primary ((`*` | `/`) Primary)*;
 Primary ::= `(` Expr `)` | Number | Ident;
 

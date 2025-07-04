@@ -2,6 +2,14 @@ pub struct Bitvector {
   v: Array[Byte]
 }
 
+pub impl Show for Bitvector with to_string(self) {
+  self.raw().to_string()
+}
+
+pub impl Show for Bitvector with output(self, logger) {
+  logger.write_string(self.to_string())
+}
+
 pub trait BitvectorConvertible {
   from(Self) -> Bitvector
   to(Bitvector) -> Self

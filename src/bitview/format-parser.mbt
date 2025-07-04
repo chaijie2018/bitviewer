@@ -67,7 +67,7 @@ fn add(lexer: Lexer) -> Expr raise Malformed {
         let x = mul(lexer);
         n = Binary(Sub, n, x);
       }
-      _ => break
+      _ => { lexer.pos -= 1; break; }
     }
   }
   n
@@ -88,10 +88,12 @@ fn parse(spec: ArrayView[Char]) -> Spec raise Malformed {
   };
   
   let lexer = { chars: Array::from_iter(spec[place:].iter()), pos: 0 };
-  let len = expr(lexer);
+  let mut len = expr(lexer);
   let mut from = None;
   if (lexer.check("..")) {
-    from = Some(expr(lexer));
+    from = Some(len);
+    // len = stop - start + 1 (inclusive)
+    len = Binary(Add, Const(1), Binary(Sub, expr(lexer), len));
   }
   
   { endian, from, len }
