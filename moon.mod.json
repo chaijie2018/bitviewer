@@ -1,0 +1,10 @@
+{
+  "name": "AdUhTkJm/bitviewer",
+  "version": "0.1.0",
+  "readme": "README.md",
+  "repository": "",
+  "license": "GPL-3.0-or-later",
+  "keywords": ["bit", "byte", "binary", "parser"],
+  "description": "A binary parser.",
+  "source": "src"
+}
