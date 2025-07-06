@@ -54,6 +54,22 @@ inspect(map, content={
 
 Note the `..` is inclusive on both ends.
 
+Besides extracting bits, you can also build up bits from a specification:
+
+```mbt
+let spec =
+#|h1 : 3*5-4+1;
+#|h2 : 4;
+
+let viewer = Bitviewer::build(spec, {
+  "h1": 0x234,
+  "h2": 1
+});
+// This will return a bitvector.
+viewer.raw();
+// The content is 0x3412, because it's little endian by default. As an int, it's 0x1234.
+```
+
 For a detailed usage introduction, see the [bitvector](#bitvector) and [bitviewer](#bitviewer) sections below.
 
 ## Bitvector
@@ -63,6 +79,8 @@ You can view it as an easy conversion layer between different integer types and 
 You can use `Bitvector::from(x)` for various types of `x`, including integer types, Byte, Char, Bytes and byte array. The method `raw()` copies the content into `Bytes`, and `view()` returns its internal representation `Array[Byte]`. 
 
 To convert it into other types, you can use the `to` method, and supply a value of type `T` as its argument to make it return type `T`. For example, `bv.to(0)` returns an `Int`, and `bv.to('_')` returns a `Char`.
+
+The method `set(from, to, bv)` will copy the content of the argument `bv` to the bits `[from:to]`. Moreover, you can use the view syntax `bv[from:to]` to extract bits from the bitvector.
 
 ## Bitviewer
 

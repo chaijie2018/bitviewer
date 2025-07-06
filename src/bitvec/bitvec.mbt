@@ -79,12 +79,28 @@ pub impl BitvectorConvertible for Array[Byte] with to(bv) {
   bv.v
 }
 
+pub impl BitvectorConvertible for ArrayView[Byte] with from(self) {
+  { v: self.to_array() }
+}
+
+pub impl BitvectorConvertible for ArrayView[Byte] with to(bv) {
+  bv.v
+}
+
 pub impl BitvectorConvertible for Bytes with from(self) {
   { v: self.to_array() }
 }
 
 pub impl BitvectorConvertible for Bytes with to(bv) {
   Bytes::from_array(bv.v)
+}
+
+pub impl BitvectorConvertible for Bitvector with from(self) {
+  self
+}
+
+pub impl BitvectorConvertible for Bitvector with to(bv) {
+  bv
 }
 
 ///|
@@ -134,4 +150,86 @@ test {
   let bv2 = Bitvector::from(b"hello world".to_array());
   println(bv2.to(0));
   println(bv2.raw());
+}
+
+///|
+/// Sets the bits from `from` to `to` with `value`. Note that `to` is **excluded** from the range.
+/// 
+/// When `from` or `to` is longer than the bitvector's length, it panics.
+/// 
+/// The `value` will be truncated when it's too long, and will be sign-extended when it's too short.
+/// 
+pub fn Bitvector::set(self: Bitvector, from: Int, to: Int, value: Bitvector) -> Unit {
+  if (from > to) {
+    return;
+  }
+  
+  let cnt = to - from;
+  // Clear the bits in the target range.
+  for i in 0..<cnt {
+    let byte_idx = (from + i) / 8;
+    let bit_idx = (from + i) % 8;
+    if (byte_idx >= self.v.length()) {
+      break;
+    }
+    self.v[byte_idx] = (self.v[byte_idx].to_int() & (1 << bit_idx).lnot()).to_byte();
+  }
+  
+  // Set the bits from the value.
+  for i in 0..<cnt {
+    let src_byte = i / 8;
+    let src_bit = i % 8;
+    let dst_byte = (from + i) / 8;
+    let dst_bit = (from + i) % 8;
+    
+    if (dst_byte >= self.v.length()) {
+      break;
+    }
+    
+    let v = if (src_byte < value.v.length()) { (value.v[src_byte].to_int() >> src_bit) & 1 } else { 0 };
+    if v == 1 {
+      self.v[dst_byte] = (self.v[dst_byte].to_int() | (1 << dst_bit)).to_byte();
+    }
+  }
+}
+
+test "set" {
+  let v = Bitvector::from(0x22);
+  v.set(4, 8, Bitvector::from(0xa));
+  inspect(v.to(0), content="\{0xa2}");
+  v.set(0, 4, Bitvector::from(0x5));
+  inspect(v.to(0), content="\{0xa5}");
+}
+
+///|
+/// Extracts some bits from this bitvector. Panics on out-of-bound access.
+/// 
+pub fn Bitvector::op_as_view(self: Bitvector, start~: Int, end?: Int) -> Bitvector {
+  let end = if (end is Some(v)) { v } else { self.v.length() * 8 };
+    if start >= end || start < 0 {
+    return { v: [] };
+  }
+  
+  let cnt = (end - start + 7) / 8;
+  let res = Array::make(cnt, (0: Byte));
+  
+  for i in 0..<(end - start) {
+    let src_byte = (start + i) / 8;
+    let src_bit = (start + i) % 8;
+    let dst_byte = i / 8;
+    let dst_bit = i % 8;
+    if src_byte >= self.v.length() {
+      break;
+    }
+    if ((self.v[src_byte].to_int() >> src_bit) & 1) == 1 {
+      res[dst_byte] = (res[dst_byte].to_int() | (1 << dst_bit)).to_byte();
+    }
+  }
+  
+  { v: res }
+}
+
+test "get" {
+  let v = Bitvector::from(0xa2);
+  inspect(v[4:].to(0), content="\{0xa}");
 }
