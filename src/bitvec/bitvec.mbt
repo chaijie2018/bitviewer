@@ -159,10 +159,11 @@ test {
 /// 
 /// The `value` will be truncated when it's too long, and will be sign-extended when it's too short.
 /// 
-pub fn Bitvector::set(self: Bitvector, from: Int, to: Int, value: Bitvector) -> Unit {
+pub fn[T: BitvectorConvertible] Bitvector::set(self: Bitvector, from: Int, to: Int, value: T) -> Unit {
   if (from > to) {
     return;
   }
+  let value = value.from();
   
   let cnt = to - from;
   // Clear the bits in the target range.
