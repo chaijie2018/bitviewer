@@ -15,8 +15,21 @@ pub trait BitvectorConvertible {
   to(Bitvector) -> Self
 }
 
+pub impl BitvectorConvertible for Bool with from(self) {
+  { v: [self.to_int().to_byte()] }
+}
+
+pub impl BitvectorConvertible for Bool with to(bv) {
+  for v in bv.v {
+    if (v != 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
 pub impl BitvectorConvertible for Char with from(self) {
-  { v: self.to_int().to_le_bytes()[:2].iter().collect() }
+  { v: self.to_int().to_le_bytes().iter().collect() }
 }
 
 pub impl BitvectorConvertible for Char with to(bv) {
@@ -230,7 +243,25 @@ pub fn Bitvector::op_as_view(self: Bitvector, start~: Int, end?: Int) -> Bitvect
   { v: res }
 }
 
+///|
+/// Extract a single bit from this bitvector.
+/// 
+pub fn Bitvector::op_get(self: Bitvector, pos: Int) -> Int {
+  self[pos:pos+1].to(0);
+}
+
+///|
+/// Set a single bit for this bitvector.
+/// 
+pub fn Bitvector::op_set(self: Bitvector, pos: Int, val: Bool) -> Unit {
+  self.set(pos, pos + 1, val)
+}
+
 test "get" {
   let v = Bitvector::from(0xa2);
   inspect(v[4:].to(0), content="\{0xa}");
+  inspect(v[3], content="0");
+  inspect(v[1], content="1");
+  v[3] = true;
+  inspect(v.to(0), content="\{0xaa}");
 }
