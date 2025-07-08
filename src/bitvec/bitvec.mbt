@@ -33,7 +33,7 @@ pub impl BitvectorConvertible for Char with from(self) {
 }
 
 pub impl BitvectorConvertible for Char with to(bv) {
-  Int::unsafe_to_char((bv.v[1].to_int() << 8) + bv.v[0].to_int())
+  Int::unsafe_to_char(bv.out())
 }
 
 pub impl BitvectorConvertible for Byte with from(self) {
@@ -274,4 +274,9 @@ test "get" {
   inspect(v[1], content="1");
   v[3] = true;
   inspect((v.out(): Int), content="\{0xaa}");
+}
+
+test "cvt" {
+  let v = Bitvector::from(0x61);
+  inspect(v.to(' '), content="a");
 }
