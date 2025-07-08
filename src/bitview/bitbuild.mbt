@@ -3,14 +3,14 @@
 /// 
 /// See `extract()` for the details of the specification language.
 /// 
-pub fn Bitviewer::build(spec: String, x: Map[String, Int]) -> Bitviewer {
+pub fn[T: BitvectorConvertible] Bitviewer::build(spec: String, x: Map[String, T]) -> Bitviewer {
   (try? Bitviewer::build_malformable(spec, x)).unwrap()
 }
 
 ///|
 /// Same as `extract()`, but raises an error on malformed specification, rather than panicking.
 /// 
-pub fn[T: @bitvec.BitvectorConvertible] Bitviewer::build_malformable(spec: String, x_: Map[String, T]) -> Bitviewer raise Malformed {
+pub fn[T: BitvectorConvertible] Bitviewer::build_malformable(spec: String, x_: Map[String, T]) -> Bitviewer raise Malformed {
   let spec = parse_spec(spec);
   if (spec.size() == 0) {
     return Bitviewer::new(b"");
