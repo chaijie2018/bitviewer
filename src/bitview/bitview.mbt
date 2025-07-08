@@ -1,11 +1,22 @@
 typealias @bitvec.Bitvector
+traitalias @bitvec.BitvectorConvertible
 
 struct Bitviewer {
   bytes: Bytes
 }
 
-pub fn Bitviewer::new(bytes: Bytes) -> Bitviewer {
-  Bitviewer :: { bytes }
+///|
+/// Same as `from()`.
+/// 
+pub fn[T: BitvectorConvertible] Bitviewer::new(bytes: T) -> Bitviewer {
+  Bitviewer :: { bytes: T::from(bytes).out() }
+}
+
+///|
+/// Same as `new()`.
+/// 
+pub fn[T: BitvectorConvertible] Bitviewer::from(bytes: T) -> Bitviewer {
+  Bitviewer :: { bytes: T::from(bytes).out() }
 }
 
 ///|

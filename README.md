@@ -103,3 +103,15 @@ In human language, this means each statement is of the form `something : 1+2*(3-
 Note that the `;` at the end is **mandatory**. Without it, the parser will **IGNORE** everything after the first statement that is not semicolon-terminated.
 
 You can use `<` and `>` to specify little/big endianness, but it is only applicable on bit-length that is a multiple of 8.
+
+For building only, you can specify literals with names starting with `=`, and followed by a binary string. For extraction, this will be recognized as a normal name (and cannot be referred later, because it is not alphanumeric). As an example,
+
+```mbt
+let spec =
+#|a   : 5;
+#|=011: 3;
+#|b   : 6;
+#|=01 : 2;
+```
+
+This describes a 2-byte UTF-8 encoding scheme. Note the order of bits goes from LSB to MSB, which means it might be the opposite from what you're familiar with: `110xxxxx 10xxxxxx` (because this is written from MSB to LSB). The byte order is the same as you might expect, with `110` at the front and `10` at the back.

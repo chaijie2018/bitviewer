@@ -15,3 +15,11 @@ test "endian" {
   let viewer = Bitviewer::build("rev: >32", { "rev": 0x12345678 });
   inspect(viewer.raw(), content=b"\x12\x34\x56\x78".to_string());
 }
+
+test "literal" {
+  let viewer = Bitviewer::build("a: 5; =011: 3; b: 6; =01: 2", {
+    "a": 0b10001,
+    "b": 0b010011
+  })
+  inspect(viewer.raw().to(0), content="\{0b10010011_11010001}")
+}
