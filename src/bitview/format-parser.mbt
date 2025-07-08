@@ -121,6 +121,6 @@ fn eval(expr: Expr, k: Map[String, @bitvec.Bitvector]) -> Int {
     Binary(Mul, x, y) => eval(x, k) * eval(y, k)
     Binary(Div, x, y) => eval(x, k) / eval(y, k)
     Const(x) => x
-    Var(y) => k.get(y).unwrap().to(0)
+    Var(y) => k.get(y).unwrap().out()
   }
 }

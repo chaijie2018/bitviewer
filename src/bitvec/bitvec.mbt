@@ -133,6 +133,16 @@ pub fn[T: BitvectorConvertible] Bitvector::to(self: Bitvector, _x: T) -> T {
 }
 
 ///|
+/// Converts the Bitvector to a certain type.
+/// 
+/// The type is either inferred from context, or explicitly noted like `(out(): Int)`.
+/// 
+pub fn[T: BitvectorConvertible] Bitvector::out(self: Bitvector) -> T {
+  T::to(self)
+}
+
+
+///|
 /// Create a raw byte representation. This is a **copy**.
 /// 
 pub fn Bitvector::raw(self: Bitvector) -> Bytes {
@@ -263,5 +273,5 @@ test "get" {
   inspect(v[3], content="0");
   inspect(v[1], content="1");
   v[3] = true;
-  inspect(v.to(0), content="\{0xaa}");
+  inspect((v.out(): Int), content="\{0xaa}");
 }
