@@ -116,6 +116,22 @@ pub impl BitvectorConvertible for Bitvector with to(bv) {
   bv
 }
 
+pub impl BitvectorConvertible for Float with from(self) {
+  BitvectorConvertible::from(self.reinterpret_as_int())
+}
+
+pub impl BitvectorConvertible for Float with to(bv) {
+  bv.to(0).reinterpret_as_float()
+}
+
+pub impl BitvectorConvertible for Double with from(self) {
+  BitvectorConvertible::from(self.reinterpret_as_int64())
+}
+
+pub impl BitvectorConvertible for Double with to(bv) {
+  bv.to(0L).reinterpret_as_double()
+}
+
 ///|
 /// Creates a Bitvector from various number types.
 /// 
@@ -279,4 +295,6 @@ test "get" {
 test "cvt" {
   let v = Bitvector::from(0x61);
   inspect(v.to(' '), content="a");
+  let w = Bitvector::from(0x41200000); // float, 10.0
+  inspect(w.to(0.F), content="10");
 }
