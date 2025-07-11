@@ -108,6 +108,14 @@ pub impl BitvectorConvertible for Bytes with to(bv) {
   Bytes::from_array(bv.v)
 }
 
+pub impl BitvectorConvertible for @bytes.View with from(self) {
+  { v: self.to_bytes().to_array() }
+}
+
+pub impl BitvectorConvertible for @bytes.View with to(bv) {
+  Bytes::from_array(bv.v)
+}
+
 pub impl BitvectorConvertible for Bitvector with from(self) {
   self
 }

@@ -76,7 +76,7 @@ For a detailed usage introduction, see the [bitvector](#bitvector) and [bitviewe
 
 You can view it as an easy conversion layer between different integer types and byte arrays. It doesn't support bit operations on its own. If you want that, please use kesmeey's [immut_bitvector](https://mooncakes.io/docs/kesmeey/immut_BitVector), though it might have gone outdated.
 
-You can use `Bitvector::from(x)` for various types of `x`, including integer types, Byte, Char, Bytes and byte array. The method `raw()` copies the content into `Bytes`, and `view()` returns its internal representation `Array[Byte]`. 
+You can use `Bitvector::from(x)` for various types of `x`, including integer types, boolean, Bytes, byte array and the corresponding array views. The method `raw()` copies the content into `Bytes`, and `view()` returns its internal representation `Array[Byte]`. 
 
 To convert it into other types, you can use the `to` method, and supply a value of type `T` as its argument to make it return type `T`. For example, `bv.to(0)` returns an `Int`, and `bv.to('_')` returns a `Char`.
 
