@@ -1,0 +1,27 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "AdUhTkJm/bitviewer"
+
+import(
+  "AdUhTkJm/bitviewer/internal/bitvec"
+)
+
+// Values
+
+// Errors
+pub suberror Malformed String
+impl Show for Malformed
+
+// Types and methods
+type Bitviewer
+fn[T : @bitvec.BitvectorConvertible] Bitviewer::build(String, Map[String, T]) -> Self
+fn[T : @bitvec.BitvectorConvertible] Bitviewer::build_malformable(String, Map[String, T]) -> Self raise Malformed
+fn Bitviewer::extract(Self, String) -> Map[String, @bitvec.Bitvector]
+fn Bitviewer::extract_malformable(Self, String) -> Map[String, @bitvec.Bitvector] raise Malformed
+fn[T : @bitvec.BitvectorConvertible] Bitviewer::from(T) -> Self
+fn[T : @bitvec.BitvectorConvertible] Bitviewer::new(T) -> Self
+fn Bitviewer::raw(Self) -> @bitvec.Bitvector
+
+// Type aliases
+
+// Traits
+

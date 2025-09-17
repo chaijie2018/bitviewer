@@ -1,0 +1,45 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "AdUhTkJm/bitviewer/internal/bitvec"
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct Bitvector {
+  v : Array[Byte]
+}
+fn[T : BitvectorConvertible] Bitvector::from(T) -> Self
+fn Bitvector::op_as_view(Self, start~ : Int, end? : Int) -> Self
+fn Bitvector::op_get(Self, Int) -> Int
+fn Bitvector::op_set(Self, Int, Bool) -> Unit
+fn[T : BitvectorConvertible] Bitvector::out(Self) -> T
+fn Bitvector::raw(Self) -> Bytes
+fn Bitvector::rev(Self) -> Self
+fn[T : BitvectorConvertible] Bitvector::set(Self, Int, Int, T) -> Unit
+fn[T : BitvectorConvertible] Bitvector::to(Self, T) -> T
+fn Bitvector::view(Self) -> Array[Byte]
+impl BitvectorConvertible for Bitvector
+impl Show for Bitvector
+
+// Type aliases
+
+// Traits
+pub trait BitvectorConvertible {
+  from(Self) -> Bitvector
+  to(Bitvector) -> Self
+}
+impl BitvectorConvertible for Bool
+impl BitvectorConvertible for Byte
+impl BitvectorConvertible for Char
+impl BitvectorConvertible for Int
+impl BitvectorConvertible for Int64
+impl BitvectorConvertible for UInt
+impl BitvectorConvertible for UInt64
+impl BitvectorConvertible for Float
+impl BitvectorConvertible for Double
+impl BitvectorConvertible for Bytes
+impl BitvectorConvertible for Array[Byte]
+impl BitvectorConvertible for ArrayView[Byte]
+impl BitvectorConvertible for BytesView
+
