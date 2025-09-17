@@ -32,7 +32,7 @@ pub fn[T: BitvectorConvertible] Bitviewer::build_malformable(spec: String, x_: M
   let bv = Bitvector::from(Array::make((max + 7) / 8, (0: Byte)));
   for k, v in places {
     let (from, to, endian) = v;
-    let mut w = if (k.char_at(0) == '=') {
+    let mut w = if (k.get_char(0).unwrap() == '=') {
       k.to_array()[1:].map((x) => match x {
         '0' => false; '1' => true; _ => raise Malformed("'=' expects binary string")
       }) |> bit2byte |> Bitvector::from

@@ -58,7 +58,7 @@ pub impl BitvectorConvertible for UInt with from(self) {
 
 pub impl BitvectorConvertible for UInt with to(bv) {
   let mut result = 0U
-  for i in 0..<@math.minimum(bv.v.length(), 4) {
+  for i in 0..<@cmp.minimum(bv.v.length(), 4) {
     result = result + (bv.v[i].to_uint() << (i * 8))
   }
   result
@@ -78,7 +78,7 @@ pub impl BitvectorConvertible for UInt64 with from(self) {
 
 pub impl BitvectorConvertible for UInt64 with to(bv) {
   let mut result = 0UL
-  for i in 0..<@math.minimum(bv.v.length(), 8) {
+  for i in 0..<@cmp.minimum(bv.v.length(), 8) {
     result = result + (bv.v[i].to_uint64() << (i * 8))
   }
   result
