@@ -6,5 +6,5 @@
   "license": "GPL-3.0-or-later",
   "keywords": ["bit", "byte", "binary", "parser"],
   "description": "A binary parser.",
-  "source": "src"
+  "source": "bitview"
 }
